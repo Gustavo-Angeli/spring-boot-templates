@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gusta</groupId>
-	<artifactId>Template</artifactId>
+	<artifactId>Basic-CRUD</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Template</name>
 	<description>Basic template for Spring Boot projects</description>
@@ -36,6 +36,16 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.github.dozermapper</groupId>
+			<artifactId>dozer-core</artifactId>
+			<version>6.5.2</version>
 		</dependency>
 
 		<dependency>
