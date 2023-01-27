@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS info (
+	id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	cpf VARCHAR(50),
+	date_of_birth VARCHAR(10)
+);
