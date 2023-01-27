@@ -1,8 +1,8 @@
-package com.gusta.template.basic.utils;
+package com.gusta.template.utils;
 
 public class ParamValidation {
 
-    // methods created to shorten "if...throw new ...Exception" in code
+    // method created to shorten "if...throw new ...Exception" in code
     public static final <V> void checkIfIsNullOrBlankThrowingEx(V variable) {
         if (variable == null) {
             throw new IllegalArgumentException("Please put a valid value");

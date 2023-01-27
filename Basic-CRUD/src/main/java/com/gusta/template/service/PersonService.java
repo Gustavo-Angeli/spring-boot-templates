@@ -1,13 +1,16 @@
-package com.gusta.template.basic.service;
+package com.gusta.template.service;
 
 import com.gusta.template.basic.model.entities.*;
 import com.gusta.template.basic.model.vo.*;
 import com.gusta.template.basic.repository.*;
+import com.gusta.template.model.entities.*;
+import com.gusta.template.model.vo.*;
+import com.gusta.template.repository.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
-import static com.gusta.template.basic.utils.ParamValidation.*;
-import static com.gusta.template.basic.utils.ParamValidation.checkIfIsNullOrBlank;
+import static com.gusta.template.utils.ParamValidation.*;
+import static com.gusta.template.utils.ParamValidation.checkIfIsNullOrBlank;
 
 @Service
 public class PersonService {
@@ -27,16 +30,16 @@ public class PersonService {
         }
 
         repository.save(
-            PersonEntity.builder()
-                .name(vo.getName())
-                .money(vo.getMoney())
-                .activated(vo.getActivated())
-                .build());
+                PersonEntity.builder()
+                        .name(vo.getName())
+                        .money(vo.getMoney())
+                        .activated(vo.getActivated())
+                        .build());
         return vo;
     }
 
     public PersonVO findPersonById(Long id) {
-        checkIfIsNullOrBlank(id);
+        checkIfIsNullOrBlankThrowingEx(id);
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
@@ -48,7 +51,7 @@ public class PersonService {
                 .build();
     }
     public PersonVO findByName(String name) {
-        checkIfIsNullOrBlank(name);
+        checkIfIsNullOrBlankThrowingEx(name);
 
         PersonEntity entity = repository.findByName(name)
                 .orElseThrow(() -> new NullPointerException("Person " + name + " nonexistent"));
@@ -65,14 +68,13 @@ public class PersonService {
         checkIfIsNullOrBlankThrowingEx(id);
         checkIfIsNullOrBlankThrowingEx(vo.getName());
         checkIfIsNullOrBlankThrowingEx(vo.getMoney());
-        checkIfIsNullOrBlankThrowingEx(vo.getActivated());
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
 
         if (!vo.getName().equals(entity.getName())) entity.setName(vo.getName());
         if (!vo.getMoney().equals(entity.getMoney())) entity.setMoney(vo.getMoney());
-        if (!vo.getActivated().equals(entity.getActivated())) entity.setActivated(vo.getActivated());
+        if (checkIfIsNullOrBlank(vo.getActivated())) vo.setActivated(false);
 
         repository.save(entity);
 
@@ -110,7 +112,7 @@ public class PersonService {
     }
 
     public void deletePersonById(Long id) {
-        checkIfIsNullOrBlank(id);
+        checkIfIsNullOrBlankThrowingEx(id);
 
         repository.deleteById(id);
     }

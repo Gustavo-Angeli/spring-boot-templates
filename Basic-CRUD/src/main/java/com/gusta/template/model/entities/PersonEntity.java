@@ -1,4 +1,4 @@
-package com.gusta.template.basic.model.entities;
+package com.gusta.template.model.entities;
 
 import lombok.*;
 
@@ -7,6 +7,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "person")
 public class PersonEntity {
@@ -17,5 +19,6 @@ public class PersonEntity {
     private String name;
     private Double money;
     private Boolean activated;
+
 
 }
