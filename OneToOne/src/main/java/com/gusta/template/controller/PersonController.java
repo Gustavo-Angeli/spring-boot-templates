@@ -14,38 +14,38 @@ public class PersonController {
     @Autowired
     private PersonService service;
 
-    @PostMapping("createPerson")
+    @PostMapping("create-person")
     public PersonVO createPerson(@RequestBody PersonVO vo) {
         return service.createPerson(vo);
     }
 
-    @GetMapping("getPersonById/{id}")
+    @GetMapping("get-person-by-id/{id}")
     public PersonVO findPersonById(@PathVariable(name = "id") Long id) {
         return service.findPersonById(id);
     }
-    @GetMapping("getPersonByName/{name}")
+    @GetMapping("get-person-by-name/{name}")
     public PersonVO findPersonById(@PathVariable(name = "name") String name) {
         return service.findByName(name);
     }
-    @GetMapping("getAll")
+    @GetMapping("get-all")
     public List<PersonVO> findAll() {
         return service.findAll();
     }
 
-    @PutMapping("updatePersonById/{id}")
+    @PutMapping("update-person-by-id/{id}")
     public PersonVO updatePersonById(@PathVariable(name = "id") Long id, PersonVO vo) {
         return service.updatePersonById(id, vo);
     }
-    @PutMapping("deactivatePersonById/{id}")
+    @PutMapping("deactivate-person-by-id/{id}")
     public PersonVO deactivatePersonById(@PathVariable(name = "id") Long id) {
         return service.deactivatePersonById(id);
     }
-    @PutMapping("activePersonById/{id}")
+    @PutMapping("active-person-by-id/{id}")
     public PersonVO activePersonById(@PathVariable(name = "id") Long id) {
         return service.activePersonById(id);
     }
 
-    @DeleteMapping("deletePersonById/{id}")
+    @DeleteMapping("delete-person-by-id/{id}")
     public void deletePersonById(@PathVariable(name = "id") Long id) {
         service.deletePersonById(id);
     }

@@ -38,7 +38,7 @@ public class PersonService {
     }
 
     public PersonVO findPersonById(Long id) {
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(id);
+        checkIfIsNullOrBlankThrowingEx(id);
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
@@ -51,7 +51,7 @@ public class PersonService {
                 .build();
     }
     public PersonVO findByName(String name) {
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(name);
+        checkIfIsNullOrBlankThrowingEx(name);
 
         PersonEntity entity = repository.findByName(name)
                 .orElseThrow(() -> new NullPointerException("Person " + name + " nonexistent"));
@@ -83,9 +83,9 @@ public class PersonService {
     }
 
     public PersonVO updatePersonById(Long id, PersonVO vo) {
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(id);
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(vo.getName());
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(vo.getMoney());
+        checkIfIsNullOrBlankThrowingEx(id);
+        checkIfIsNullOrBlankThrowingEx(vo.getName());
+        checkIfIsNullOrBlankThrowingEx(vo.getMoney());
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
@@ -99,7 +99,7 @@ public class PersonService {
         return vo;
     }
     public PersonVO deactivatePersonById(Long id) {
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(id);
+        checkIfIsNullOrBlankThrowingEx(id);
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
@@ -114,7 +114,7 @@ public class PersonService {
                 .build();
     }
     public PersonVO activePersonById(Long id) {
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(id);
+        checkIfIsNullOrBlankThrowingEx(id);
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
