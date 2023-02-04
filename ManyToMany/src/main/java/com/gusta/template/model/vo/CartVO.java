@@ -1,9 +1,7 @@
 package com.gusta.template.model.vo;
 
-import com.gusta.template.model.entities.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.*;
 
 @AllArgsConstructor

@@ -2,8 +2,6 @@ package com.gusta.template.model.vo;
 
 import lombok.*;
 
-import javax.persistence.*;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

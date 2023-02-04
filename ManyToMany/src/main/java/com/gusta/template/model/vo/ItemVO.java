@@ -1,6 +1,5 @@
 package com.gusta.template.model.vo;
 
-import com.gusta.template.model.entities.*;
 import lombok.*;
 
 @AllArgsConstructor
