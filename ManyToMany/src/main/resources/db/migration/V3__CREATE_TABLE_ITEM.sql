@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS item (
+	id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	amount INTEGER DEFAULT 10,
+	product_id bigint
+);
