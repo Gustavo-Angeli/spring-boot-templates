@@ -1,5 +1,6 @@
 package com.gusta.template.service;
 
+import com.gusta.template.mapper.*;
 import com.gusta.template.model.entities.*;
 import com.gusta.template.model.vo.*;
 import com.gusta.template.repository.*;
@@ -22,17 +23,17 @@ public class PersonService {
 
         if (checkIfIsNullOrBlank(vo.getMoney())) vo.setMoney(0D);
         if (checkIfIsNullOrBlank(vo.getActivated())) vo.setActivated(false);
-        if (checkIfIsNullOrBlank(vo.getPersonInfo().getCpf())) vo.getPersonInfo().setCpf(null);
-        if (checkIfIsNullOrBlank(vo.getPersonInfo().getDateOfBirth())) vo.getPersonInfo().setDateOfBirth(null);
+        if (checkIfIsNullOrBlank(vo.getInfo().getCpf())) vo.getInfo().setCpf(null);
+        if (checkIfIsNullOrBlank(vo.getInfo().getDateOfBirth())) vo.getInfo().setDateOfBirth(null);
 
-        vo.getPersonInfo().setDateOfBirth(FormattedBirthDate.formatted(vo.getPersonInfo().getDateOfBirth()));
+        vo.getInfo().setDateOfBirth(FormattedBirthDate.formatted(vo.getInfo().getDateOfBirth()));
 
         repository.save(
                 PersonEntity.builder()
                         .name(vo.getName())
                         .money(vo.getMoney())
                         .activated(vo.getActivated())
-                        .info(vo.getPersonInfo())
+                        .info(DozerMapper.parseObject(vo.getInfo(), InfoEntity.class))
                         .build());
         return vo;
     }
@@ -43,12 +44,7 @@ public class PersonService {
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
 
-        return PersonVO.builder()
-                .name(entity.getName())
-                .money(entity.getMoney())
-                .activated(entity.getActivated())
-                .personInfo(entity.getInfo())
-                .build();
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
     public PersonVO findByName(String name) {
         checkIfIsNullOrBlankThrowingEx(name);
@@ -56,47 +52,25 @@ public class PersonService {
         PersonEntity entity = repository.findByName(name)
                 .orElseThrow(() -> new NullPointerException("Person " + name + " nonexistent"));
 
-        return PersonVO.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .money(entity.getMoney())
-                .activated(entity.getActivated())
-                .personInfo(entity.getInfo())
-                .build();
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
     public List<PersonVO> findAll() {
-        List<PersonEntity> list = repository.findAll();
-        List<PersonVO> voList = new ArrayList<>();
-
-        for (PersonEntity entity : list) {
-            voList.add(
-                    PersonVO.builder()
-                            .id(entity.getId())
-                            .name(entity.getName())
-                            .money(entity.getMoney())
-                            .activated(entity.getActivated())
-                            .personInfo(entity.getInfo())
-                            .build()
-            );
-        }
-        return voList;
+        return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
 
     public PersonVO updatePersonById(Long id, PersonVO vo) {
-        checkIfIsNullOrBlankThrowingEx(id);
-        checkIfIsNullOrBlankThrowingEx(vo.getName());
-        checkIfIsNullOrBlankThrowingEx(vo.getMoney());
+        checkIfIsNullOrBlankThrowingEx(id, vo.getName(), vo.getMoney());
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
 
         if (!vo.getName().equals(entity.getName())) entity.setName(vo.getName());
         if (!vo.getMoney().equals(entity.getMoney())) entity.setMoney(vo.getMoney());
-        if (checkIfIsNullOrBlank(vo.getActivated())) vo.setActivated(false);
+        if (checkIfIsNullOrBlank(vo.getActivated())) entity.setActivated(false);
 
         repository.save(entity);
 
-        return vo;
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
     public PersonVO deactivatePersonById(Long id) {
         checkIfIsNullOrBlankThrowingEx(id);
@@ -108,10 +82,7 @@ public class PersonService {
 
         repository.save(entity);
 
-        return PersonVO.builder()
-                .name(entity.getName())
-                .activated(entity.getActivated())
-                .build();
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
     public PersonVO activePersonById(Long id) {
         checkIfIsNullOrBlankThrowingEx(id);
@@ -123,14 +94,13 @@ public class PersonService {
 
         repository.save(entity);
 
-        return PersonVO.builder()
-                .name(entity.getName())
-                .activated(entity.getActivated())
-                .build();
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
 
     public void deletePersonById(Long id) {
-        ParamValidation.checkIfIsNullOrBlankThrowingEx(id);
+        checkIfIsNullOrBlankThrowingEx(id);
+
+        if (checkIfIsNullOrBlank(repository.findById(id))) throw new NullPointerException("Person not exists");
 
         repository.deleteById(id);
     }

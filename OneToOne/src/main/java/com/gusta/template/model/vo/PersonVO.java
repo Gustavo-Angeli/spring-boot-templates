@@ -1,8 +1,9 @@
 package com.gusta.template.model.vo;
 
-import com.gusta.template.model.entities.*;
 import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class PersonVO {
@@ -10,5 +11,5 @@ public class PersonVO {
     private String name;
     private Double money;
     private Boolean activated;
-    private InfoEntity personInfo;
+    private InfoVO info;
 }
