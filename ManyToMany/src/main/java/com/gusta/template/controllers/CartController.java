@@ -1,7 +1,7 @@
-package com.gusta.template.controller;
+package com.gusta.template.controllers;
 
-import com.gusta.template.model.vo.*;
-import com.gusta.template.service.*;
+import com.gusta.template.models.vo.*;
+import com.gusta.template.services.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +22,12 @@ public class CartController {
             @PathVariable(name = "productId") Long productId,
             @PathVariable(name = "amount") Long amount
     ) {
-        return service.addItemInCart(cartId, productId, Integer.valueOf(amount.toString()));
+        return service.addItemInCartByProductId(cartId, productId, Integer.valueOf(amount.toString()));
     }
 
     @GetMapping("getCart/{cartId}")
     public CartVO getCart(@PathVariable(name = "cartId") Long cartId) {
-        return service.getCart(cartId);
+        return service.getCartByCartId(cartId);
     }
 
     @DeleteMapping("removeItem/{cartId}/{itemId}")
@@ -35,7 +35,7 @@ public class CartController {
             @PathVariable(name = "cartId") Long cartId,
             @PathVariable(name = "itemId") Long itemId
     ) {
-        return service.removeItem(cartId, itemId);
+        return service.removeItemByItemId(cartId, itemId);
     }
 
     @PatchMapping("reduceItemAmount/{cartId}/{productId}/{amount}")
@@ -44,6 +44,6 @@ public class CartController {
             @PathVariable(name = "productId") Long productId,
             @PathVariable(name = "amount") Long amount
     ) {
-        return service.reduceItemAmount(cartId, productId, Integer.valueOf(amount.toString()));
+        return service.reduceItemAmountByProductId(cartId, productId, Integer.valueOf(amount.toString()));
     }
 }

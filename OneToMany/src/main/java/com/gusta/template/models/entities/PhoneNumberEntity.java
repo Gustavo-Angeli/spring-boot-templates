@@ -1,13 +1,10 @@
-package com.gusta.template.model.entities;
+package com.gusta.template.models.entities;
 
 import lombok.*;
 
 import javax.persistence.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Builder
 @Entity
 @Table(name = "phone_numbers")
 public class PhoneNumberEntity {

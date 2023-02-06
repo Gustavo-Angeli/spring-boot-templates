@@ -1,4 +1,4 @@
-package com.gusta.template.model.vo;
+package com.gusta.template.models.vo;
 
 import lombok.*;
 

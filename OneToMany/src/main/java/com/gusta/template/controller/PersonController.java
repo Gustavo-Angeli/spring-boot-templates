@@ -1,7 +1,7 @@
 package com.gusta.template.controller;
 
-import com.gusta.template.model.vo.*;
-import com.gusta.template.service.*;
+import com.gusta.template.models.vo.*;
+import com.gusta.template.services.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,16 +33,8 @@ public class PersonController {
     }
 
     @PutMapping("update-person-by-id/{id}")
-    public PersonVO updatePersonById(@PathVariable(name = "id") Long id, PersonVO vo) {
-        return service.updatePersonById(id, vo);
-    }
-    @PutMapping("deactivate-person-by-id/{id}")
-    public PersonVO deactivatePersonById(@PathVariable(name = "id") Long id) {
-        return service.deactivatePersonById(id);
-    }
-    @PutMapping("active-person-by-id/{id}")
-    public PersonVO activePersonById(@PathVariable(name = "id") Long id) {
-        return service.activePersonById(id);
+    public PersonVO updatePersonById(PersonVO vo) {
+        return service.updatePersonById(vo);
     }
     @PutMapping("add-phone-number/{id}")
     public PersonVO addPhoneNumber(@PathVariable(name = "id") Long id, @RequestBody PhoneNumberVO phoneNumberVO) {

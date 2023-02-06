@@ -1,12 +1,10 @@
-package com.gusta.template.model.entities;
+package com.gusta.template.models.entities;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
 @Entity
@@ -16,8 +14,6 @@ public class PersonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Double money;
-    private Boolean activated;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "person_phone_numbers",

@@ -1,6 +1,6 @@
-package com.gusta.template.repository;
+package com.gusta.template.repositories;
 
-import com.gusta.template.model.entities.*;
+import com.gusta.template.models.entities.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
 

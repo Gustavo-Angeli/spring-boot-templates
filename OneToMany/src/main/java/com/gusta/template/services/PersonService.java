@@ -1,14 +1,15 @@
-package com.gusta.template.service;
+package com.gusta.template.services;
 
 import com.gusta.template.mapper.*;
-import com.gusta.template.model.entities.*;
-import com.gusta.template.model.vo.*;
+import com.gusta.template.models.entities.*;
+import com.gusta.template.models.vo.*;
 import com.gusta.template.repository.*;
 import com.gusta.template.utils.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import static com.gusta.template.utils.ParamValidation.*;
 
@@ -21,15 +22,6 @@ public class PersonService {
     public PersonVO createPerson(PersonVO vo) {
         checkIfIsNullOrBlankThrowingEx(vo.getName());
 
-        if (checkIfIsNullOrBlank(vo.getMoney())) vo.setMoney(0D);
-        if (checkIfIsNullOrBlank(vo.getActivated())) vo.setActivated(false);
-        if (checkIfIsNullOrBlank(vo.getInfo().getCpf())) vo.getInfo().setCpf(null);
-        if (checkIfIsNullOrBlank(vo.getInfo().getDateOfBirth())) vo.getInfo().setDateOfBirth(null);
-
-        if (!checkIfIsNullOrBlank(vo.getInfo().getDateOfBirth())) {
-            vo.getInfo().setDateOfBirth(FormattedBirthDate.formatted(vo.getInfo().getDateOfBirth()));
-
-        }
         repository.save(DozerMapper.parseObject(vo, PersonEntity.class));
         return vo;
     }
@@ -54,39 +46,25 @@ public class PersonService {
         return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
 
-    public PersonVO updatePersonById(Long id, PersonVO vo) {
-        checkIfIsNullOrBlankThrowingEx(id, vo.getName(), vo.getMoney());
+    public PersonVO updatePersonById(PersonVO vo) {
+        checkIfIsNullOrBlankThrowingEx(vo.getId(), vo.getName());
 
-        PersonEntity entity = repository.findById(id)
+        PersonEntity entity = repository.findById(vo.getId())
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
 
         if (!vo.getName().equals(entity.getName())) entity.setName(vo.getName());
-        if (!vo.getMoney().equals(entity.getMoney())) entity.setMoney(vo.getMoney());
-        if (checkIfIsNullOrBlank(vo.getActivated())) entity.setActivated(false);
 
         repository.save(entity);
 
-        return DozerMapper.parseObject(entity, PersonVO.class);
+        return vo;
     }
-    public PersonVO deactivatePersonById(Long id) {
-        checkIfIsNullOrBlankThrowingEx(id);
+    public PersonVO addNumberToPerson(Long id, PhoneNumberVO numberVO) {
+        checkIfIsNullOrBlankThrowingEx(id, numberVO.getPhoneNumber());
 
         PersonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
 
-        entity.setActivated(false);
-
-        repository.save(entity);
-
-        return DozerMapper.parseObject(entity, PersonVO.class);
-    }
-    public PersonVO activePersonById(Long id) {
-        checkIfIsNullOrBlankThrowingEx(id);
-
-        PersonEntity entity = repository.findById(id)
-                .orElseThrow(() -> new NullPointerException("Person not found!"));
-
-        entity.setActivated(true);
+        entity.getNumbers().add(DozerMapper.parseObject(numberVO, PhoneNumberEntity.class));
 
         repository.save(entity);
 
@@ -94,11 +72,23 @@ public class PersonService {
     }
 
     public void deletePersonById(Long id) {
-        checkIfIsNullOrBlankThrowingEx(id);
-
-        if (checkIfIsNullOrBlank(repository.findById(id))) throw new NullPointerException("Person not exists");
+        ParamValidation.checkIfIsNullOrBlankThrowingEx(id);
 
         repository.deleteById(id);
+    }
+    public PersonVO deletePersonNumber(Long idPerson, Long idPhone) {
+        PersonEntity entity = repository.findById(idPerson)
+                .orElseThrow(() -> new NullPointerException("Person not found!"));
+
+        List<PhoneNumberEntity> list = entity.getNumbers().stream()
+                .filter(p -> !p.getId().equals(idPhone))
+                .collect(Collectors.toList());
+
+        entity.setNumbers(list);
+
+        repository.save(entity);
+
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
 
 }

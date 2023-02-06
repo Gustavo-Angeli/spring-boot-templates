@@ -1,10 +1,10 @@
-package com.gusta.template.service;
+package com.gusta.template.services;
 
 import com.gusta.template.exceptions.*;
 import com.gusta.template.mapper.*;
-import com.gusta.template.model.entities.*;
-import com.gusta.template.model.vo.*;
-import com.gusta.template.repository.*;
+import com.gusta.template.models.entities.*;
+import com.gusta.template.models.vo.*;
+import com.gusta.template.repositories.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -31,7 +31,7 @@ public class CartService {
         return DozerMapper.parseObject(cartRepository.save(cart), CartVO.class);
     }
 
-    public CartVO addItemInCart(Long cartId, Long productId, Integer amount) {
+    public CartVO addItemInCartByProductId(Long cartId, Long productId, Integer amount) {
         checkIfIsNullOrBlankThrowingEx(cartId, productId, amount);
 
         if (amount <= 0) throw new InvalidValueException("Not possible add this amount into cart");
@@ -50,8 +50,7 @@ public class CartService {
                             .build()
             );
             cart.setTotalAmountAndTotalPrice();
-            cartRepository.save(cart);
-            return DozerMapper.parseObject(cart, CartVO.class);
+            return DozerMapper.parseObject(cartRepository.save(cart), CartVO.class);
         }
 
         /*
@@ -67,23 +66,24 @@ public class CartService {
             if (item.getProduct().getId().equals(product.getId())) {
                 cart.getItems().get(index).setAmount(item.getAmount() + amount);
                 cart.setTotalAmountAndTotalPrice();
-                cartRepository.save(cart);
-                return DozerMapper.parseObject(cart, CartVO.class);
+                return DozerMapper.parseObject(cartRepository.save(cart), CartVO.class);
             }
         }
 
-        // If none of the conditions are true, a new item will be created and added to the list of items
+        /*
+            If none of the conditions are true(List isn't empty or an existent item),
+             a new item will be created and added to the list of items
+        */
         cart.getItems().add(
                 ItemEntity.builder()
                         .product(product)
                         .amount(amount)
                         .build());
         cart.setTotalAmountAndTotalPrice();
-        cartRepository.save(cart);
-        return DozerMapper.parseObject(cart, CartVO.class);
+        return DozerMapper.parseObject(cartRepository.save(cart), CartVO.class);
     }
 
-    public CartVO getCart(Long cartId) {
+    public CartVO getCartByCartId(Long cartId) {
         checkIfIsNullOrBlankThrowingEx(cartId);
 
         CartEntity cart = cartRepository.findById(cartId)
@@ -92,7 +92,7 @@ public class CartService {
         return DozerMapper.parseObject(cart, CartVO.class);
     }
 
-    public CartVO removeItem(Long cartId, Long itemId) {
+    public CartVO removeItemByItemId(Long cartId, Long itemId) {
         checkIfIsNullOrBlankThrowingEx(cartId, itemId);
 
         CartEntity cart = cartRepository.findById(cartId)
@@ -134,7 +134,7 @@ public class CartService {
                 .build();
     }
 
-    public CartVO reduceItemAmount(Long cartId, Long productId, Integer amount) {
+    public CartVO reduceItemAmountByProductId(Long cartId, Long productId, Integer amount) {
         checkIfIsNullOrBlankThrowingEx(cartId, productId, amount);
 
         CartEntity cart = cartRepository.findById(cartId)
