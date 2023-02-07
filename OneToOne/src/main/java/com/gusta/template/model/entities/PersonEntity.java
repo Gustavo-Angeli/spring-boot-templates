@@ -19,6 +19,6 @@ public class PersonEntity {
     private String name;
     private Double money;
     private Boolean activated;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private InfoEntity info;
 }

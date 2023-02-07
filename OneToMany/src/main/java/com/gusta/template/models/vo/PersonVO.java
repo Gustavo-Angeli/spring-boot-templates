@@ -4,6 +4,8 @@ import lombok.*;
 
 import java.util.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class PersonVO {

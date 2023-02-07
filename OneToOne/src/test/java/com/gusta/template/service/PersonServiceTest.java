@@ -97,23 +97,23 @@ public class PersonServiceTest {
     void testUpdatePersonById_NullOrBlankParams() {
         vo.setName(null);
 
-        assertThrows(IllegalArgumentException.class, () -> service.updatePersonById(0L, vo));
+        assertThrows(IllegalArgumentException.class, () -> service.updatePersonById(vo));
 
         vo.setName("");
 
-        assertThrows(IllegalArgumentException.class, () -> service.updatePersonById(0L, vo));
+        assertThrows(IllegalArgumentException.class, () -> service.updatePersonById(vo));
     }
     @Test
     void testUpdatePersonById_PersonNotFound() {
         when(repository.findById(0L)).thenReturn(null);
 
-        assertThrows(NullPointerException.class, () -> service.updatePersonById(0L, vo));
+        assertThrows(NullPointerException.class, () -> service.updatePersonById(vo));
     }
     @Test
     void testUpdatePersonById_Success() {
         when(repository.findById(0L)).thenReturn(Optional.ofNullable(entity));
 
-        assertEquals(vo, service.updatePersonById(0L, vo));
+        assertEquals(vo, service.updatePersonById(vo));
     }
 
     @Test

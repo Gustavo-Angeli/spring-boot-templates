@@ -32,9 +32,9 @@ public class PersonController {
         return service.findAll();
     }
 
-    @PutMapping("update-person-by-id/{id}")
-    public PersonVO updatePersonById(@PathVariable(name = "id") Long id, PersonVO vo) {
-        return service.updatePersonById(id, vo);
+    @PutMapping("update-person-by-id")
+    public PersonVO updatePersonById(@RequestBody PersonVO vo) {
+        return service.updatePersonById(vo);
     }
     @PutMapping("deactivate-person-by-id/{id}")
     public PersonVO deactivatePersonById(@PathVariable(name = "id") Long id) {

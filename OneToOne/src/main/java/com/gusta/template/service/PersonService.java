@@ -54,10 +54,10 @@ public class PersonService {
         return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
 
-    public PersonVO updatePersonById(Long id, PersonVO vo) {
-        checkIfIsNullOrBlankThrowingEx(id, vo.getName(), vo.getMoney());
+    public PersonVO updatePersonById(PersonVO vo) {
+        checkIfIsNullOrBlankThrowingEx(vo.getId(), vo.getName(), vo.getMoney());
 
-        PersonEntity entity = repository.findById(id)
+        PersonEntity entity = repository.findById(vo.getId())
                 .orElseThrow(() -> new NullPointerException("Person not found!"));
 
         if (!vo.getName().equals(entity.getName())) entity.setName(vo.getName());
